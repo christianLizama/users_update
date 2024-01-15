@@ -277,7 +277,7 @@ obtenerDatos("TIR");
 
 // Programar la ejecución de la función obtenerDatos en las horas especificadas
 cronStrings.forEach((horaCron) => {
-  cron.schedule(horaCron, () => obtenerDatos("TNR"), {
+  cron.schedule(horaCron, () => obtenerDatos("TRN"), {
     timezone: "America/Santiago", 
   });
 });
