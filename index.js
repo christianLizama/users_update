@@ -267,7 +267,7 @@ const crearEventosConductor = (conductor, ausentismo, vacaciones) => {
 //obtenerDatos();
 
 // Configurar las horas de ejecución en formato cron
-const cronStrings = ["0 6 * * *", "0 14 * * *", "0 17 * * *"]; // Cadenas cron para 6 am, 2 pm y 5 pm
+const cronStrings = ["0 6 * * *", "0 9 * * *", "0 11 * * *", "0 13 * * *", "0 15 * * *", "0 17 * * *"];
 
 //Ejecutar la primera vez al iniciar el servidor
 obtenerDatos("TRN");
