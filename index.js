@@ -9,8 +9,8 @@ import Evento from "./models/Evento.js";
 import mongoose from "mongoose";
 
 import dayjs from "dayjs";
-import utc from 'dayjs/plugin/utc.js';
-import timezone from 'dayjs/plugin/timezone.js';
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -177,8 +177,12 @@ const obtenerDatos = async (emp) => {
     console.log("-----------------------");
     console.log("Conductores creados:", conductoresCreados);
     console.log("Conductores actualizados:", conductoresActualizados);
-    const fechaEjecucion = dayjs().tz("America/Santiago").format("YYYY-MM-DD HH:mm:ss");
-    console.log(`La función obtenerDatos se ejecutó el ${fechaEjecucion} para la empresa ${empresa}`);
+    const fechaEjecucion = dayjs()
+      .tz("America/Santiago")
+      .format("YYYY-MM-DD HH:mm:ss");
+    console.log(
+      `La función obtenerDatos se ejecutó el ${fechaEjecucion} para la empresa ${empresa}`
+    );
     console.log("-----------------------");
   } catch (error) {
     console.error("Error al obtener datos:", error.message);
@@ -195,33 +199,29 @@ const crearEventosConductor = (conductor, ausentismo, vacaciones) => {
     const [diaDesde, mesDesde, anioDesde] = desde.split("/").map(Number);
     const [diaHasta, mesHasta, anioHasta] = hasta.split("/").map(Number);
 
-    if (anioDesde === 2024) {
-      let fechaInicio = new Date(anioDesde, mesDesde - 1, diaDesde);
-      const fechaFin = new Date(anioHasta, mesHasta - 1, diaHasta);
+    let fechaInicio = new Date(anioDesde, mesDesde - 1, diaDesde);
+    const fechaFin = new Date(anioHasta, mesHasta - 1, diaHasta);
 
-      while (fechaInicio <= fechaFin) {
-        let nombreModifcado = descripcion.toLowerCase();
-        // console.log(nombreModifcado);
-        if (nombreModifcado.includes("licencia")) {
-            nombre = "licencia";
-        }
-        else if(nombre ==="vacacion"){
-            nombre = "vacacion";
-        }
-        else{
-            nombre = "ausentismo";
-        }
-        
-        eventos.push({
-          nombre,
-          descripcion,
-          fecha: new Date(fechaInicio),
-          user: conductor._id,
-          tipo: descripcion,
-        });
-
-        fechaInicio.setDate(fechaInicio.getDate() + 1);
+    while (fechaInicio <= fechaFin) {
+      let nombreModifcado = descripcion.toLowerCase();
+      // console.log(nombreModifcado);
+      if (nombreModifcado.includes("licencia")) {
+        nombre = "licencia";
+      } else if (nombre === "vacacion") {
+        nombre = "vacacion";
+      } else {
+        nombre = "ausentismo";
       }
+
+      eventos.push({
+        nombre,
+        descripcion,
+        fecha: new Date(fechaInicio),
+        user: conductor._id,
+        tipo: descripcion,
+      });
+
+      fechaInicio.setDate(fechaInicio.getDate() + 1);
     }
   };
 
@@ -266,8 +266,6 @@ const crearEventosConductor = (conductor, ausentismo, vacaciones) => {
 
 //obtenerDatos();
 
-
-
 // Configurar las horas de ejecución en formato cron
 const cronStrings = ["0 6 * * *", "0 14 * * *", "0 17 * * *"]; // Cadenas cron para 6 am, 2 pm y 5 pm
 
@@ -278,16 +276,15 @@ obtenerDatos("TIR");
 // Programar la ejecución de la función obtenerDatos en las horas especificadas
 cronStrings.forEach((horaCron) => {
   cron.schedule(horaCron, () => obtenerDatos("TRN"), {
-    timezone: "America/Santiago", 
+    timezone: "America/Santiago",
   });
 });
 
 cronStrings.forEach((horaCron) => {
   cron.schedule(horaCron, () => obtenerDatos("TIR"), {
-    timezone: "America/Santiago", 
+    timezone: "America/Santiago",
   });
 });
-
 
 app.listen(port, () => {
   console.log(`Servidor corriendo en el puerto ${port}`);
