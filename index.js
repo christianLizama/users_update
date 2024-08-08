@@ -37,6 +37,12 @@ mongoose.connect(uri, options).then(
 // Middleware CORS
 app.use(cors());
 
+const generarCorreoProvisional = (nombreCompleto, rut) => {
+  const nombreNormalizado = nombreCompleto.replace(/\s+/g, '.').toLowerCase();
+  const correoProvisional = `${nombreNormalizado}.${rut}@provisional.com`;
+  return correoProvisional;
+};
+
 // Función para obtener y procesar los datos
 const obtenerDatos = async (emp) => {
   try {
@@ -86,7 +92,7 @@ const obtenerDatos = async (emp) => {
     const conductoresInfo = usuarios.map((user) => ({
       nombreCompleto: user.ficha.nombrecompleto,
       rut: user.ficha.rut,
-      email: user.ficha.email,
+      email: user.ficha.email.trim() || generarCorreoProvisional(user.ficha.nombrecompleto, user.ficha.rut),
       rol: "CONDUCTOR",
       empresa: empresa,
       clave: bcrypt.hashSync(user.ficha.rut, 10),
